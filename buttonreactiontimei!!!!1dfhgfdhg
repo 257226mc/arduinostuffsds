@@ -1,0 +1,56 @@
+#include <time.h>
+
+int randoms = 0;
+float timing = 0;
+float before = 0;
+
+void setup() 
+{
+  pinMode(12, INPUT);
+  pinMode(2, INPUT);
+  Serial.begin(9600);
+}
+
+int loopstate = 0;
+void loop()
+{
+  randomSeed(analogRead(12));
+  randoms = random(2, 5);
+  while(loopstate == 0)
+  {
+    Serial.println("Press the button once the periods become exclamation marks.");
+    delay(5000);
+    loopstate = 1;
+  }
+
+  while(loopstate == 1)
+  {
+    before = analogRead(2);
+    if(timing < randoms)
+    {
+      Serial.println("...");
+    }
+    else if(timing >= randoms)
+    {
+      Serial.println("!!!");
+      if(analogRead(2) == HIGH && before == LOW)
+      {
+        loopstate = 2;
+      }
+    }
+    delay(100);
+    timing += 0.1;
+  }
+
+  timing -= 0.1;
+  while(loopstate == 2)
+  {
+    randoms -= timing;
+    Serial.println("It took you ") ;
+    Serial.println(randoms);
+    Serial.println(" seconds to react");
+    Serial.println("Restarting in 5 seconds...");
+    delay(5000);
+    loopstate == 0;
+  }
+}
