@@ -1,0 +1,16 @@
+int cellReading;
+int Brightness;
+
+void setup()
+{
+  Serial.begin(9600);
+}
+
+void loop()
+{
+  Serial.println(analogRead(2));
+  cellReading = 1023 - analogRead(2);
+  Brightness = map(cellReading, 0, 1023, 0, 255);
+  analogWrite(11, Brightness);
+  delay(1000);
+}
